@@ -3,8 +3,7 @@ import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import ClientsPage from "@/features/clients/pages/ClientsPage";
 import InvoicesPage from "@/features/invoices/pages/InvoicesPage";
 import SettingsPage from "@/features/settings/pages/SettingsPage";
-import LoginPage from "@/features/auth/pages/LoginPage";
-import RegisterPage from "@/features/auth/pages/RegisterPage";
+import AuthPage from "@/features/auth/pages/AuthPage";
 import NotFound from "@/features/notfound/pages/NotFound";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -18,9 +17,7 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-
+      <Route path="/auth" element={<AuthPage />} />
       <Route
         path="/"
         element={
