@@ -5,13 +5,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Button } from "@/components/ui/button";
-import {
-  registerSchema,
-  type RegisterForm,
-} from "@/features/auth/pages/authSchema";
+import { registerSchema, type RegisterForm } from "@/modules/auth/services";
+import type { IRegisterDTO } from "@/types/register";
 
 export const Register: FC = (): ReactElement => {
   const [show, setShow] = useState(true);
+  const [confirmShow, setConfirmShow] = useState(true);
 
   const {
     register,
@@ -19,17 +18,24 @@ export const Register: FC = (): ReactElement => {
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      mode: "register",
-    },
   });
 
   const onSubmit = (data: RegisterForm) => {
-    console.log("Register data:", data);
-    // handle registration (e.g., API call)
+    try {
+      const registerData: IRegisterDTO = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      };
+      console.log(registerData);
+      // await login(loginData);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   const toggleShow = () => setShow((prev) => !prev);
+  const toggleConfirmShow = () => setConfirmShow((prev) => !prev);
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
@@ -40,8 +46,8 @@ export const Register: FC = (): ReactElement => {
           id="name"
           type="text"
           placeholder="Full Name"
-          {...register("name")}
           className="bg-[var(--color-input)] text-[var(--color-foreground)] border border-[var(--color-border)] p-2 rounded-md"
+          {...register("name")}
         />
         {errors.name && (
           <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -55,6 +61,7 @@ export const Register: FC = (): ReactElement => {
           id="email"
           type="email"
           placeholder="you@example.com"
+          className="bg-[var(--color-input)] text-[var(--color-foreground)] border border-[var(--color-border)] p-2 rounded-md"
           {...register("email")}
         />
         {errors.email && (
@@ -70,6 +77,7 @@ export const Register: FC = (): ReactElement => {
             id="password"
             type={show ? "password" : "text"}
             placeholder="••••••••"
+            className="bg-[var(--color-input)] text-[var(--color-foreground)] border border-[var(--color-border)] p-2 rounded-md"
             {...register("password")}
           />
           <span className="absolute right-2 top-2 cursor-pointer">
@@ -91,15 +99,16 @@ export const Register: FC = (): ReactElement => {
           <Input
             autoComplete="off"
             id="confirmPassword"
-            type={show ? "password" : "text"}
+            type={confirmShow ? "password" : "text"}
             placeholder="••••••••"
+            className="bg-[var(--color-input)] text-[var(--color-foreground)] border border-[var(--color-border)] p-2 rounded-md"
             {...register("confirmPassword")}
           />
           <span className="absolute right-2 top-2 cursor-pointer">
-            {show ? (
-              <GoEye onClick={toggleShow} />
+            {confirmShow ? (
+              <GoEye onClick={toggleConfirmShow} />
             ) : (
-              <GoEyeClosed onClick={toggleShow} />
+              <GoEyeClosed onClick={toggleConfirmShow} />
             )}
           </span>
         </div>

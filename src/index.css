@@ -3,7 +3,6 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -119,5 +118,15 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: theme("colors.foreground") !important;
+    font-family: theme("fontFamily.sans") !important;
+    transition: background-color 5000s ease-in-out 0s;
   }
 }

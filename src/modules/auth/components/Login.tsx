@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Button } from "@/components/ui/button";
-import { loginSchema, type LoginForm } from "@/features/auth/pages/authSchema";
+import { loginSchema, type LoginForm } from "@/modules/auth/services";
+import type { ILoginDTO } from "@/types/login";
 
 export const Login: FC = (): ReactElement => {
   const [show, setShow] = useState(true);
@@ -16,14 +17,16 @@ export const Login: FC = (): ReactElement => {
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      mode: "login",
-    },
   });
 
   const onSubmit = (data: LoginForm) => {
-    console.log("Login data:", data);
-    // handle registration (e.g., API call)
+    try {
+      const loginData: ILoginDTO = data;
+      console.log(loginData);
+      // await login(loginData);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   const toggleShow = () => setShow((prev) => !prev);
@@ -37,6 +40,7 @@ export const Login: FC = (): ReactElement => {
           id="email"
           type="email"
           placeholder="you@example.com"
+          className="bg-[var(--color-input)] text-[var(--color-foreground)] border border-[var(--color-border)] p-2 rounded-md"
           {...register("email")}
         />
         {errors.email && (
@@ -52,6 +56,7 @@ export const Login: FC = (): ReactElement => {
             id="password"
             type={show ? "password" : "text"}
             placeholder="••••••••"
+            className="bg-[var(--color-input)] text-[var(--color-foreground)] border border-[var(--color-border)] p-2 rounded-md"
             {...register("password")}
           />
           <span className="absolute right-2 top-2 cursor-pointer">

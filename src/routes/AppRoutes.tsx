@@ -1,17 +1,17 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import DashboardPage from "@/features/dashboard/pages/DashboardPage";
-import ClientsPage from "@/features/clients/pages/ClientsPage";
-import InvoicesPage from "@/features/invoices/pages/InvoicesPage";
-import SettingsPage from "@/features/settings/pages/SettingsPage";
-import AuthPage from "@/features/auth/pages/AuthPage";
-import NotFound from "@/features/notfound/pages/NotFound";
+import DashboardPage from "@/modules/dashboard/pages/DashboardPage";
+import ClientsPage from "@/modules/clients/pages/ClientsPage";
+import InvoicesPage from "@/modules/invoices/pages/InvoicesPage";
+import SettingsPage from "@/modules/settings/pages/SettingsPage";
+import AuthPage from "@/modules/auth/pages/AuthPage";
+import NotFound from "@/modules/notfound/pages/NotFound";
 
 import { useAuth } from "@/hooks/useAuth";
 import type { JSX } from "react";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/auth" />;
 };
 
 export default function AppRoutes() {

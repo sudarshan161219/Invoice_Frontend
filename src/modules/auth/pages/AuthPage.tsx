@@ -1,7 +1,7 @@
 import "./index.css";
 import { useState, type FC, type ReactElement } from "react";
-import { Register } from "@/components/authComponents/Register";
-import { Login } from "@/components/authComponents/Login";
+import { Register } from "@/modules/auth/components/Register";
+import { Login } from "@/modules/auth/components/Login";
 
 const AuthPage: FC = (): ReactElement => {
   const [isLogin, setIsLogin] = useState(true);
