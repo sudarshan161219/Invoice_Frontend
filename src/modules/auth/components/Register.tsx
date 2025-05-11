@@ -5,13 +5,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Button } from "@/components/ui/button";
-import { registerSchema, type RegisterForm } from "@/modules/auth/services";
+import {
+  registerSchema,
+  type RegisterForm,
+} from "@/modules/auth/schemas/services";
 import type { IRegisterDTO } from "@/types/register";
+import { registerUser } from "../api/auth.api";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const Register: FC = (): ReactElement => {
   const [show, setShow] = useState(true);
   const [confirmShow, setConfirmShow] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -20,17 +26,23 @@ export const Register: FC = (): ReactElement => {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterForm) => {
+  const onSubmit = async (data: RegisterForm) => {
+    setLoading(true);
     try {
       const registerData: IRegisterDTO = {
         name: data.name,
         email: data.email,
         password: data.password,
       };
-      console.log(registerData);
-      // await login(loginData);
+      await registerUser(registerData);
+      toast("Success!", {
+        description: "You have registered successfully.",
+      });
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Registration failed", error);
+      toast.error("Something went wrong during registration.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,8 +131,19 @@ export const Register: FC = (): ReactElement => {
         )}
       </div>
 
-      <Button type="submit" className="w-full cursor-pointer">
-        Register
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full cursor-pointer"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Register"
+        )}
       </Button>
     </form>
   );

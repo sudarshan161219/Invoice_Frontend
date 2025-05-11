@@ -5,11 +5,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Button } from "@/components/ui/button";
-import { loginSchema, type LoginForm } from "@/modules/auth/services";
+import { loginSchema, type LoginForm } from "@/modules/auth/schemas/services";
 import type { ILoginDTO } from "@/types/login";
+import { loginUser } from "../api/auth.api";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const Login: FC = (): ReactElement => {
   const [show, setShow] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -19,13 +23,17 @@ export const Login: FC = (): ReactElement => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginForm) => {
+  const onSubmit = async (data: LoginForm) => {
+    setLoading(true);
     try {
       const loginData: ILoginDTO = data;
-      console.log(loginData);
-      // await login(loginData);
+      await loginUser(loginData);
+      toast.success("You have been logged in successfully.");
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("Please check your credentials and try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,8 +80,19 @@ export const Login: FC = (): ReactElement => {
         )}
       </div>
 
-      <Button type="submit" className="w-full cursor-pointer">
-        Sign In
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full cursor-pointer"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Sign In"
+        )}
       </Button>
     </form>
   );
