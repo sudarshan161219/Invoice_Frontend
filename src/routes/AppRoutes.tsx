@@ -5,12 +5,16 @@ import InvoicesPage from "@/modules/invoices/pages/InvoicesPage";
 import SettingsPage from "@/modules/settings/pages/SettingsPage";
 import AuthPage from "@/modules/auth/pages/AuthPage";
 import NotFound from "@/modules/notfound/pages/NotFound";
+import { LoadingSpinner } from "@/components/loading";
 
 import { useAuth } from "@/hooks/useAuth";
 import type { JSX } from "react";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return user ? children : <Navigate to="/auth" />;
 };
 
