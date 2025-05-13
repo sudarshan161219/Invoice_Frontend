@@ -32,8 +32,8 @@ export const Login: FC = (): ReactElement => {
     setLoading(true);
     try {
       const loginData: ILoginDTO = data;
-      const response = await loginUser(loginData);
-      login(response.user);
+      await loginUser(loginData);
+      // login(response.user);
       toast.success("You have been logged in successfully.");
       navigate("/");
     } catch (error) {

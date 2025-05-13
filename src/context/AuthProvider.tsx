@@ -3,34 +3,46 @@ import type { ReactNode } from "react";
 import { AuthContext } from "./auth-context";
 import type { User } from "@/types/user";
 import type { AuthContextType } from "@/types/authContext";
+import { getUser } from "@/modules/auth/api/auth.api";
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
-export const AuthProvider = ({ children }: AuthProviderProps)  => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const fetchUser = async () => {
+      try {
+        const res = await getUser();
+        setUser(res);
+      } catch (err) {
+        console.log(err, "hello");
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    fetchUser();
   }, []);
 
-  const login = (userData: User) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+  const login = async () => {
+    try {
+      const res = await getUser(); // refetch after login
+      setUser(res.data);
+    } catch (err) {
+      console.error("Login refetch error:", err);
+      setUser(null);
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
+    // Optional: Call logout endpoint to clear cookie if needed
     setUser(null);
   };
-
 
   const value: AuthContextType = {
     user,
