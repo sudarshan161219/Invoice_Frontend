@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const res = await getUser();
         setUser(res);
       } catch (err) {
-        console.log(err, "hello");
+        console.log(err);
         setUser(null);
       } finally {
         setLoading(false);
@@ -31,8 +31,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async () => {
     try {
-      const res = await getUser(); // refetch after login
-      setUser(res.data);
+      const res = await getUser();
+      setUser(res);
     } catch (err) {
       console.error("Login refetch error:", err);
       setUser(null);

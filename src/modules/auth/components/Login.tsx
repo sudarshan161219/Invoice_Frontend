@@ -10,16 +10,15 @@ import type { ILoginDTO } from "@/types/login";
 import { loginUser } from "../api/auth.api";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Login: FC = (): ReactElement => {
   const [show, setShow] = useState(true);
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
-  const { login } = useAuth();
 
+  const { login, user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -33,7 +32,8 @@ export const Login: FC = (): ReactElement => {
     try {
       const loginData: ILoginDTO = data;
       await loginUser(loginData);
-      // login(response.user);
+      console.log(user);
+      login();
       toast.success("You have been logged in successfully.");
       navigate("/");
     } catch (error) {

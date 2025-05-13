@@ -5,6 +5,7 @@ import InvoicesPage from "@/modules/invoices/pages/InvoicesPage";
 import SettingsPage from "@/modules/settings/pages/SettingsPage";
 import AuthPage from "@/modules/auth/pages/AuthPage";
 import NotFound from "@/modules/notfound/pages/NotFound";
+import { SidebarLayout } from "@/components/layout/SidebarLayout";
 import { LoadingSpinner } from "@/components/loading";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -22,38 +23,20 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/auth" element={<AuthPage />} />
+
       <Route
         path="/"
         element={
           <PrivateRoute>
-            <DashboardPage />
+            <SidebarLayout />
           </PrivateRoute>
         }
-      />
-      <Route
-        path="/clients"
-        element={
-          <PrivateRoute>
-            <ClientsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/invoices"
-        element={
-          <PrivateRoute>
-            <InvoicesPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <PrivateRoute>
-            <SettingsPage />
-          </PrivateRoute>
-        }
-      />
+      >
+        <Route index element={<DashboardPage />} />
+        <Route path="clients" element={<ClientsPage />} />
+        <Route path="invoices" element={<InvoicesPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+      </Route>
 
       <Route path="*" element={<NotFound />} />
     </Routes>
