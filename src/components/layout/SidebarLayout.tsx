@@ -3,6 +3,7 @@ import { useState, useEffect, type FC, type ReactElement } from "react";
 
 // Routing
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // UI Components
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -24,7 +25,10 @@ import {
   Settings,
   LogOut,
   Menu,
+  Plus,
 } from "lucide-react";
+
+import { useAuth } from "@/hooks/useAuth";
 
 // Accessibility
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -32,7 +36,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 export const SidebarLayout: FC = (): ReactElement => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const { user } = useAuth();
   // Automatically close mobile sidebar on route change
   useEffect(() => {
     setSidebarOpen(false);
@@ -51,10 +55,18 @@ export const SidebarLayout: FC = (): ReactElement => {
   ];
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex flex-col h-full justify-between w-full">
       {/* Header */}
       <div>
-        <div className="text-xl font-semibold mb-6 px-2 pt-2">Invoice App</div>
+        <div className="text-xl font-semibold mb-6 px-2 pt-2">
+          <div className="flex items-center gap-3">
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>{user?.name.slice(0, 1)}</AvatarFallback>
+            </Avatar>
+            <span className=" text-sm">{user?.name}</span>
+          </div>
+        </div>
 
         {/* Navigation Links */}
         <ScrollArea className="h-[calc(100vh-120px)] pr-2">
@@ -80,23 +92,23 @@ export const SidebarLayout: FC = (): ReactElement => {
       </div>
 
       {/* Logout Button */}
-      <div className="p-2">
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-2"
-          onClick={handleLogout}
-        >
-          <LogOut size={18} />
-          Logout
-        </Button>
-      </div>
+      {/* <div className="logout-container"> */}
+      <Button
+        variant="ghost"
+        className="w-full justify-start gap-2 cursor-pointer "
+        onClick={handleLogout}
+      >
+        <LogOut size={18} />
+        Logout
+      </Button>
+      {/* </div> */}
     </div>
   );
 
   return (
     <div className="flex h-screen">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 bg-muted border-r p-4">
+      <aside className="hidden md:flex w-64 bg-background text-foreground border-r p-4">
         <SidebarContent />
       </aside>
 
@@ -129,8 +141,9 @@ export const SidebarLayout: FC = (): ReactElement => {
         {/* Topbar */}
         <header className="h-16 border-b px-4 flex items-center justify-end">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gray-300" />
-            <span className="text-sm font-medium">John Doe</span>
+            <Button variant="link" className="cursor-pointer">
+              <Plus /> New Invoice
+            </Button>
           </div>
         </header>
 
