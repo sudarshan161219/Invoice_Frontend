@@ -54,8 +54,8 @@ export const SidebarLayout: FC = (): ReactElement => {
     { path: "/settings", label: "Settings", icon: <Settings size={18} /> },
   ];
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full justify-between w-full">
+  const SidebarContent = ({ className }: { className?: string }) => (
+    <div className={`flex flex-col h-full justify-center ${className}`}>
       {/* Header */}
       <div>
         <div className="text-xl font-semibold mb-6 px-2 pt-2">
@@ -92,7 +92,7 @@ export const SidebarLayout: FC = (): ReactElement => {
       </div>
 
       {/* Logout Button */}
-      {/* <div className="logout-container"> */}
+      <div className="logout-container">
       <Button
         variant="ghost"
         className="w-full justify-start gap-2 cursor-pointer "
@@ -101,7 +101,7 @@ export const SidebarLayout: FC = (): ReactElement => {
         <LogOut size={18} />
         Logout
       </Button>
-      {/* </div> */}
+      </div>
     </div>
   );
 
@@ -122,16 +122,15 @@ export const SidebarLayout: FC = (): ReactElement => {
             <Menu />
           </Button>
         </SheetTrigger>
+
         <SheetContent side="left" className="w-64 p-0">
-          <SheetHeader>
-            <SheetTitle>
-              <SheetDescription>
-                <VisuallyHidden>Navigation Menu</VisuallyHidden>
-              </SheetDescription>
-            </SheetTitle>
-          </SheetHeader>
-          <div className="h-full p-4">
-            <SidebarContent />
+          <div className="flex flex-col h-full p-3">
+            {/* <div className="p-4">
+              <div className="text-xl font-semibold mb-6">Invoice App</div>
+            </div> */}
+            <div className="flex-1 ">
+              <SidebarContent />
+            </div>
           </div>
         </SheetContent>
       </Sheet>
