@@ -1,34 +1,25 @@
-import { type FC, type ReactElement, useState, useEffect } from "react";
+import { type FC, type ReactElement } from "react";
 import { SectionCards } from "@/components/section-cards";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-// import data from "../../../../public/data.json";
+import { InvoicesTable } from "../components/invoicesTable/InvoicesTable";
+import { InvoiceStatusPieChart } from "../components/invoiceStatusPieChart/InvoiceStatusPieChart";
+import { RevenueChart } from "../components/revenueChart/RevenueChart";
+
 
 const DashboardPage: FC = (): ReactElement => {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/data.json")
-      .then((res) => res.json())
-      .then((json) => {
-        setData(json);
-        setLoading(false);
-      });
-  }, []);
-
-  console.log(data);
   return (
-    <SidebarProvider>
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              {loading ? "Loading..." : <SectionCards invoices={data} />}
-            </div>
-          </div>
+    <div className="flex flex-1 flex-col">
+      <div className="@container/main flex flex-1 flex-col gap-5">
+        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <SectionCards invoices={[]} />
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+        <InvoicesTable />
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-7">
+          <InvoiceStatusPieChart />
+          <RevenueChart />
+        </div>
+      </div>
+    </div>
   );
 };
 

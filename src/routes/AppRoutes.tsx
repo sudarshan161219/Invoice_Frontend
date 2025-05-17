@@ -5,7 +5,7 @@ import InvoicesPage from "@/modules/invoices/pages/InvoicesPage";
 import SettingsPage from "@/modules/settings/pages/SettingsPage";
 import AuthPage from "@/modules/auth/pages/AuthPage";
 import NotFound from "@/modules/notfound/pages/NotFound";
-import { SidebarLayout } from "@/components/layout/SidebarLayout";
+import { SidebarLayout } from "@/layout/SidebarLayout";
 import { LoadingSpinner } from "@/components/loading";
 
 import { useAuth } from "@/hooks/useAuth";
