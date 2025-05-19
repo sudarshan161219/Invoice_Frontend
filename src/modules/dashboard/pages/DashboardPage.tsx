@@ -5,7 +5,7 @@ import { InvoiceStatusPieChart } from "../components/invoiceStatusPieChart/Invoi
 import { RevenueChart } from "../components/revenueChart/RevenueChart";
 
 
-const DashboardPage: FC = (): ReactElement => {
+export const DashboardPage: FC = (): ReactElement => {
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-5">
@@ -23,4 +23,3 @@ const DashboardPage: FC = (): ReactElement => {
   );
 };
 
-export default DashboardPage;
