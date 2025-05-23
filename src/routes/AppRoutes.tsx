@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { DashboardPage } from "@/modules/dashboard/pages/DashboardPage";
-import ClientsPage from "@/modules/clients/pages/ClientsPage";
+import { ClientsPage } from "@/modules/clients/pages/ClientsPage";
 import InvoicesPage from "@/modules/invoices/pages/InvoicesPage";
 import { SettingsPage } from "@/modules/settings/pages/SettingsPage";
 import AuthPage from "@/modules/auth/pages/AuthPage";
