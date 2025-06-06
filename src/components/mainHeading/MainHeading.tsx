@@ -11,6 +11,7 @@ export const MainHeading: FC = (): ReactElement => {
       "/": "Overview",
       "/clients": "Clients",
       "/invoices": "Invoices",
+      "/invoices/new": "Create Invoice",
       "/settings": "Settings",
       "/profile": "Your Profile",
     };

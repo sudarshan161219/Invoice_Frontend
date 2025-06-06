@@ -7,7 +7,8 @@ import {
 } from "react";
 import { debounce } from "lodash";
 import type { SearchInputProps } from "@/types/search-input";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
+import { Input } from "@/components/input/Input";
 
 export const SearchInput: FC<SearchInputProps> = ({
   placeholder = "Search...",

@@ -1,12 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { DashboardPage } from "@/modules/dashboard/pages/DashboardPage";
-import { ClientsPage } from "@/modules/clients/pages/ClientsPage";
-import InvoicesPage from "@/modules/invoices/pages/InvoicesPage";
-import { SettingsPage } from "@/modules/settings/pages/SettingsPage";
-import AuthPage from "@/modules/auth/pages/AuthPage";
-import NotFound from "@/modules/notfound/pages/NotFound";
-import { SidebarLayout } from "@/layout/SidebarLayout";
+import {
+  AuthPage,
+  DashboardPage,
+  ClientsPage,
+  InvoicesPage,
+  SettingsPage,
+  CreateInvoice,
+  CreateClient,
+  PaymentsPage,
+  NotFound,
+} from "@/modules/export.ts";
+
 import { LoadingSpinner } from "@/components/loading";
+import { Sidebar } from "@/layout/Sidebar";
 
 import { useAuth } from "@/hooks/useAuth";
 import type { JSX } from "react";
@@ -28,13 +34,16 @@ export default function AppRoutes() {
         path="/"
         element={
           <PrivateRoute>
-            <SidebarLayout />
+            <Sidebar />
           </PrivateRoute>
         }
       >
         <Route index element={<DashboardPage />} />
-        <Route path="clients" element={<ClientsPage />} />
         <Route path="invoices" element={<InvoicesPage />} />
+        <Route path="invoices/new" element={<CreateInvoice />} />
+        <Route path="clients/new" element={<CreateClient />} />
+        <Route path="clients" element={<ClientsPage />} />
+        <Route path="payments" element={<PaymentsPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
 

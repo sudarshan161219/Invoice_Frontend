@@ -1,16 +1,20 @@
 import { type FC, type ReactElement } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Table } from "@/components/table/Table";
+import { MoreVertical, Copy } from "lucide-react";
+import type { Column } from "@/types/table.types";
 
-const invoices = [
+type Invoice = {
+  invoice: string;
+  client: string;
+  email: string;
+  paymentStatus: "Paid" | "Unpaid" | "Overdue";
+  bg: string;
+  totalAmount: string;
+  paymentMethod: string;
+  due: string;
+};
+
+const invoices: Invoice[] = [
   {
     invoice: "INV001",
     client: "Acme Corp",
@@ -25,7 +29,7 @@ const invoices = [
     invoice: "INV002",
     client: "Globex Ltd",
     email: "sophia.williams@freelancehub.com",
-    paymentStatus: "Pending",
+    paymentStatus: "Overdue",
     bg: "bg-yellow-200",
     totalAmount: "$150.00",
     paymentMethod: "PayPal",
@@ -63,69 +67,92 @@ const invoices = [
   },
 ];
 
+const statusColorMap: Record<Invoice["paymentStatus"], string> = {
+  Paid: "border-[var(--status-paid-border)] text-[var(--status-paid-text)]",
+  Unpaid:
+    "border-[var(--status-unpaid-border)] text-[var(--status-unpaid-text)]",
+  Overdue:
+    "border-[var(--status-overdue-border)] text-[var(--status-overdue-text)]",
+};
+
+const invoiceColumns: Column<Invoice>[] = [
+  { key: "invoice", title: "Invoice ID" },
+  { key: "client", title: "Client" },
+  {
+    key: "email",
+    title: "Email",
+    render: (invoice) => (
+      <div className="flex items-center gap-2">
+        <span>{invoice.email}</span>
+        <CopyButton value={invoice.email} />
+      </div>
+    ),
+  },
+  {
+    key: "paymentStatus",
+    title: "Status",
+    render: (invoice) => (
+      <span
+        className={`px-2.5 py-0.5  border rounded-md text-xs font-medium ${
+          statusColorMap[invoice.paymentStatus]
+        }`}
+      >
+        {invoice.paymentStatus}
+      </span>
+    ),
+  },
+  { key: "totalAmount", title: "Amount" },
+  { key: "paymentMethod", title: "Method" },
+  {
+    key: "due",
+    title: "Due Date",
+    render: (value) => new Date(value.due).toLocaleDateString(),
+  },
+  {
+    key: "actions",
+    title: "Actions",
+    render: () => (
+      <div className="space-x-2">
+        <button className="hover:text-gray-800">
+          <MoreVertical size={18} />
+        </button>
+      </div>
+    ),
+  },
+];
+
+function CopyButton({ value }: { value: string }) {
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      console.log("Copied to clipboard:", value);
+      // Optional: use toast("Copied!") here
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="ml-2 text-gray-400 hover:text-gray-600"
+      title="Copy to clipboard"
+    >
+      <Copy size={16} />
+    </button>
+  );
+}
+
 export const InvoicesTable: FC = (): ReactElement => {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold">Recent Invoices</h2>
 
-      <div className="w-full overflow-x-auto rounded-lg border ">
-        <Table>
-          {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px] hidden md:table-cell">
-                Invoice
-              </TableHead>
-              <TableHead>Client</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="hidden md:table-cell">Method</TableHead>
-              <TableHead className="hidden md:table-cell">Due Date</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="font-medium hidden md:table-cell">
-                  {invoice.invoice}
-                </TableCell>
-                <TableCell className="flex flex-col">
-                  {invoice.client}
-                  <span className="text-sm">{invoice.email}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge className={invoice.bg}>{invoice.paymentStatus}</Badge>
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {invoice.paymentMethod}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {invoice.due}
-                </TableCell>
-                <TableCell className="text-right">
-                  {invoice.totalAmount}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-
-          <TableFooter className="hidden md:table-row-group">
-            <TableRow>
-              <TableCell colSpan={5}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
-            </TableRow>
-          </TableFooter>
-
-          {/* Mobile footer */}
-
-          <TableFooter className="md:hidden table-row-group">
-            <TableRow>
-              <TableCell colSpan={2}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
+      <Table
+        data={invoices}
+        columns={invoiceColumns}
+        rowKey={(c) => c.invoice}
+      />
     </div>
   );
 };

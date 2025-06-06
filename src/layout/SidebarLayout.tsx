@@ -49,8 +49,6 @@ export const SidebarLayout: FC = (): ReactElement => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
-  console.log(theme);
-
   // Automatically close mobile sidebar on route change
   useEffect(() => {
     setSidebarOpen(false);

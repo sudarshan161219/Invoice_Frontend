@@ -1,0 +1,12 @@
+.input {
+  height: 38px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0.8rem 0 0.8rem;
+}
+
+.inputlabel {
+  font-size: 12px;
+}

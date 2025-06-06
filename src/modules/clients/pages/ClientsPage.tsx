@@ -5,12 +5,117 @@ import { FilterSort } from "@/components/FilterSort/FilterSort";
 import { Tabs } from "../components/Tabs/Tabs";
 import { SearchInput } from "@/components/searchInput/SearchInput";
 import type { SortOption } from "@/types/sortOptions";
+import { Table } from "@/components/table/Table";
+import type { Column } from "@/types/table.types";
+import { MoreVertical, Copy } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-const sortOptions: SortOption[] = [
-  { label: "A → Z", value: "name-asc" },
-  { label: "Z → A", value: "name-desc" },
-  { label: "Newest", value: "date-desc" },
-  { label: "Oldest", value: "date-asc" },
+function CopyButton({ value }: { value: string }) {
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      console.log("Copied to clipboard:", value);
+      // Optional: use toast("Copied!") here
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="ml-2 text-gray-400 hover:text-gray-600"
+      title="Copy to clipboard"
+    >
+      <Copy size={16} />
+    </button>
+  );
+}
+const clients = [
+  {
+    id: "1",
+    name: "Samantha Smith",
+    // avatar: "",
+    email: "sam@example.com",
+    company: "Acme Corp",
+    phone: 123456789,
+    support: "frontend",
+    createdAt: "2024-12-01",
+  },
+  {
+    id: "2",
+    name: "John Doe",
+    // avatar: "",
+    email: "john@example.com",
+    company: "Globex Inc",
+    phone: 123456789,
+    support: "node js backend",
+    createdAt: "2024-12-04",
+  },
+];
+// https://api.dicebear.com/7.x/lorelei/svg?seed=John%20Doe
+const clientColumns: Column<Clients>[] = [
+  {
+    key: "name",
+    title: "Name",
+    render: (client) => (
+      <div className="flex flex-row gap-2 items-center  ">
+        <img
+          src={`https://api.dicebear.com/7.x/lorelei/svg?seed=John%20Doe`}
+          alt={"Skibiddi"}
+          className="w-10 h-10 rounded-full"
+        />
+        <h1>{client.name}</h1>
+      </div>
+    ),
+  },
+  { key: "company", title: "Company" },
+  {
+    key: "email",
+    title: "Email",
+    render: (client) => (
+      <div className="flex items-center">
+        <span>{client.email}</span>
+        <CopyButton value={client.email} />
+      </div>
+    ),
+  },
+  {
+    key: "phone",
+    title: "Phone",
+    render: (client) => (
+      <div className="flex items-center">
+        <span>{client.phone}</span>
+        <CopyButton value={client.phone} />
+      </div>
+    ),
+  },
+  { key: "support", title: "Support" },
+
+  {
+    key: "createdAt",
+    title: "Created",
+    render: (client) => new Date(client.createdAt).toLocaleDateString(),
+  },
+  {
+    key: "actions",
+    title: "Actions",
+    render: (client) => (
+      <div className=" space-x-2">
+        <button className=" hover:text-gray-800">
+          <MoreVertical size={18} />
+        </button>
+      </div>
+    ),
+  },
 ];
 
 export const ClientsPage: FC = (): ReactElement => {
@@ -31,17 +136,31 @@ export const ClientsPage: FC = (): ReactElement => {
   return (
     <div className="space-y-6">
       <div className="w-full flex flex-row justify-between">
-        <Tabs />
+        {/* <Tabs /> */}
         <SearchInput
           placeholder="Search client"
           onDebouncedChange={handleSearch}
         />
-        <FilterSort
-          sortOptions={sortOptions}
-          selectedSort={sortBy}
-          onSortChange={handleSortChange}
-        />
       </div>
+
+      <Table data={clients} columns={clientColumns} rowKey={(c) => c.id} />
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
